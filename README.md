@@ -2,4 +2,4 @@
 Recommender Systems  
 Summer 2020 Term  
   
-Reposity Includes Assignments, Final Project, and any Artefacts related to those
+Repository Includes Assignments, Final Project, and any Artefacts related to those
