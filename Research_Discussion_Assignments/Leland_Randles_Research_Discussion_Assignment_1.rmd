@@ -1,0 +1,60 @@
+---
+title: "Research Discussion Assignment 1 - DATA 612 - Summer 2020"
+author: "Leland Randles"
+date: "July 15, 2020"
+output: 
+  html_document:
+    toc: true # table of content true
+    toc_float: true
+    toc_depth: 3  # up to three depths of headings (specified by #, ## and ###)
+    number_sections: true  #if you want number sections at each table header
+    theme: united  # many options for theme, this one is my favorite
+    highlight: tango  # specifies the syntax highlighting style
+    #css: my.css   # you can add your custom css, should be in same folder
+---
+
+# Choose One of the Three Recommender Systems 
+<a href="#top"> Back To Top </a>  
+  
+From the message board assignment: "You may also choose one of the three non-personalized recommenders (below) we went over in class and describe the technique and which of the three you prefer to use."
+
+I chose Rotton Tomatoes, as it is my favorite of the three choices (Metacritic, Rotten Tomatoes and IMDB), at least in terms of recommendation.  
+
+Per the link provided, Rotten Tomatoes provides three types of ratings:
+
++ TomatoMeter - A percentage score between 0-100% which is computed based on the opinions of hundreds of film and television critics (some of which are designated "top" critics). This score is the percentage of the critics who provided a positive review for the movie or TV show. There must be a minimum of at least 5 critics who have submitted their rating before the tomatometer is active. Though the percentage score is displayed, an icon is also assigned, which can be a red tomato (which means he score is 60% or more), a green splat icon (which means the score is under 60%), or a 
+greyed out tomato, which means there have not been enough reviews yet (less than 5 submitted, presumably) or the movie/TV show has not been released yet.  
++ Certified Fresh - this is a status tag (icon) which is either present or not present. It distinguishes the best-reviewed movies and TV shows. To be tagged with this status, the movie or TV show must have had a consistent 75%+ TomatoMeter score, amongst other things. Attaining these criteria is not the only requirement. The movie or TV show must attain them "consistently", which means they meet this criteria for a period of time and are stable (unlikely to vary below the criteria).
++ Audience Score - The audience score works like the TomatoMeter except the people submitting their views are not critics, and the rating scale is 1-5 stars. In this case, the percentage score is the percentage of users who rate the movie 3.5 stars or more. If 60% rate it as 3.5 stars or more, then the movie gets a popcorn tub icon. If less than 60% rate it as 3.5 stars or more, then it gets a spilled over popcorn tub icon. If not enough users have review the movie or TV show or it has not been released, it gets a greyed-out popcorn tub icon. 
+
+This is not a particularly complicated system, nor does it use the techniques we have discussed in this class, but I still prefer it because of its ease of use. If you are perusing a list of movies or TV shows, you can quickly refer to the icons. If you are looking at a specific movie or TV show, you can see both the critics' assessment and regular viewer assessments in one place. You can see quickly if it is a polarizing movie (i.e., if the audience score is 60%+, but the average star rating is significantly below 3.5, then most users gave it 3.5+, but the ones who didn't rated it low - love it or hate it phenomenon).  
+
+You can quickly get a good summary of critics' and users' ratings. For example, for the 2020 movie "Shirley", I can see immediately that critics love it (87% score and Certified Fresh) while the audience is so-so or at least mixed (58% score). I can then click "See Score Details" to quickly drill into the numbers:
+
+![Score Details](C:/Users/Lelan/Desktop/data612/Research_Discussion_Assignments/RDA1.jpg)
+
+It should be noted that 90% of the time I go to MetaCritic, Rotten Tomatoes or IMDB, I am going there to look up a specific movie. I rarely go there to browse and find a movie.  
+  
+<br>
+  
+# Attacks on Recommender System
+<a href="#top"> Back To Top </a>  
+  
+In the article included in the assignment (see references) - "Wisdom of the crowd? IMDb users gang up on Christian Bale’s new movie before it even opens" - does not specify whether the Turkish internet trolls who submitted bogus reviews to IMDB did so one-by-one or via some kind of automated process.
+
+Regardless, I think the first step in eliminating or reducing the possibility for attacks on recommendation systems is technical. Your web site has to be set up so that data cannot be injected into it, or so that it cannot be taken over by automation. If you make it so ratings are almost certainly entered manually, then you reduce the problem to monitoring user behavior, which can be accomplished via Data Science methodologies. Is there a surge in profiles being created in a particular region? Is there a proper level of validation to allow someone to be eligible to submit ratings? Is the flow of ratings reasonable, or is there a surge in ratings quantity? 
+
+Perhaps more important is how the ratings get into the system. Are they real time, or is there a temporary buffer before they register? Or can ratings which are flagged as suspect be put into a temporary buffer automatically when the detection metrics call for it? 
+
+If all ratings (or perhaps only suspect ratings) were put into a temporary buffer, and then eventually released, they could them be sent into the system via streaming data technologies. 
+
+There are also some more lowfi rules that could be adopted. Should someone be able to rate a movie before it is even screened or released?  
+  
+<br>
+
+# References
+<a href="#top"> Back To Top </a>
+
+* Rotten Tomatoes (n.d.). About Rotten Tomatoes. Retrieved from https://www.rottentomatoes.com/about.
+* Travis M. Andrews, The Washington Post (2017): Wisdom of the crowd? IMDb users gang up on Christian Bale’s new movie before it even opens. https://www.washingtonpost.com/news/morning-mix/wp/2017/04/19/wisdom-of-the-crowd-imdb-users-gang-up-on-the-promise-before-it-even-opens/
+* Lam, Shyong & Riedl, John. (2004). Shilling recommender systems for fun and profit. 393-402. 10.1145/988672.988726. 
