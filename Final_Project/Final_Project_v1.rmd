@@ -293,59 +293,21 @@ header <- sprintf("Surprise picks (lesser-known animes similar to): %s", a_name)
 kable(rec_names_p, col.names = header) %>% kable_styling()
 ```  
   
-## Collaborative Filtering Model  
-  
-Finally, we loaded the ratings dataset to Spark and built a recommender system using the `ml_als` function available in `sparklyr`, which builds collaborative filtering models using Alternating Least Squares (ALS).  
-  
-We then used that model to make predictions.  
-  
-```{r sprkmdl}
-# install Spark
-spark_install(version = "2.4", hadoop_version = "2.7")
-# create connection to Spark
-sc <- spark_connect(master = "local")  
-# move local disk dataframe to Spark; had to split into 10 commands
-ratingsSprk <- sdf_copy_to(sc, ratings_raw, "ratings_sprk", overwrite = TRUE)
-# create Spark recommender model
-partitions <- ratingsSprk %>% sdf_random_split(training = 0.8, test = 0.2, seed = 137)
-spark_mdl <- ml_als(partitions$training, rating ~ user_id + anime_id, rating_col = "rating", user_col = "user_id", item_col = "anime_id", cold_start_strategy = "drop")
-# predictions
-sparkPredict <- ml_predict(spark_mdl, partitions$test)
-# # create recommendation
-# sparkRec <- ml_recommend(spark_mdl, type = c("items", "users"), n = 10)
-# # check accuracy
-# rmse <- ml_regression_evaluator(sparkPredict, metric_name = "rmse")
-# mae <- ml_regression_evaluator(sparkPredict, metric_name = "mae")
-# mse <- ml_regression_evaluator(sparkPredict, metric_name = "mse")
-# als_spark<-c(rmse, mse, mae)
-# # disconnect
-# spark_disconnect(sc)
-```  
-  
+## UBCF Model  
   
 
-# UBCF
 
 ```{r}
-# #ratings matrix
-# rating_raw <- rating_raw[rating_raw$user_id %in% anime_genre_ids, ]
-# rating_mtx <- as(rating_raw, "realRatingMatrix")
-# # split datasets
-# eval_sets <- evaluationScheme(data = rating_mtx, method = "cross-validation", k = 4, given = 1, goodRating = 6)
-# # build UBCF model and SVD model
-# 
-# ubcf_rec <- Recommender(getData(eval_sets, "train"), "UBCF", param = list(normalize = "center", method = "cosine"))
-# # Make predictions with each model
-# ubcf_pred <- predict(ubcf_rec, getData(eval_sets, "known"), n = 20)
-# # Table showing error calcs for UBCF vs SVD
-# ubcf_er <- calcPredictionAccuracy(ubcf_pred, getData(eval_sets, "unknown"))
-# svd_er <- calcPredictionAccuracy(svd_pred, getData(eval_sets, "unknown"))
-# # RMSE, MSE and MAE
-# k_Method <- c("ALS", "UBCF-Cosine", "SVD")
-# k_table_p <- data.frame(rbind(als_spark, ubcf_er, svd_er))
-# rownames(k_table_p) <- k_Method
-# k_table_p <- k_table_p[order(k_table_p$RMSE) ,]
-# kable(k_table_p) %>% kable_styling()
+#ratings matrix
+rating_raw <- rating_raw[rating_raw$user_id %in% anime_genre_ids, ]
+rating_mtx <- as(rating_raw, "realRatingMatrix")
+
+# split datasets
+eval_sets <- evaluationScheme(data = rating_mtx, method = "cross-validation", k = 4, given = 1, goodRating = 6)
+# build UBCF model and SVD model
+ubcf_rec <- Recommender(getData(eval_sets, "train"), "UBCF", param = list(normalize = "center", method = "cosine"))
+# Make predictions with each model
+ubcf_pred <- predict(ubcf_rec, getData(eval_sets, "known"), n = 20)
 ```  
 
 ## Display Recommendations in Shiny App
