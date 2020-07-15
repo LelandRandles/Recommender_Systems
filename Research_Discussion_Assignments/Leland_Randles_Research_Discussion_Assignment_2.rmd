@@ -1,0 +1,46 @@
+---
+title: "Research Discussion Assignment 2 - DATA 612 - Summer 2020"
+author: "Leland Randles"
+date: "July 15, 2020"
+output: 
+  html_document:
+    toc: true # table of content true
+    toc_float: true
+    toc_depth: 3  # up to three depths of headings (specified by #, ## and ###)
+    number_sections: true  #if you want number sections at each table header
+    theme: united  # many options for theme, this one is my favorite
+    highlight: tango  # specifies the syntax highlighting style
+    #css: my.css   # you can add your custom css, should be in same folder
+---
+
+# Assignment
+<a href="#top"> Back To Top </a>  
+  
+From the message board assignment: "For this discussion item, please watch the following talk and summarize what you found to be the most important or interesting points."  
+  
+The YouTube talk, which is called "Music Recommendations at Scale with Spark - Christopher Johnson (Spotify)", is linked here: 
+http://www.youtube.com/watch?v=3LBgiFch4_g  
+  
+I discuss various takeaways in the sections below.  
+
+## Non-Scalable Methods - Use or Reject?  
+
+While the primary focus of the video wound up being on SVD and executing that via "traditional" Hadoop (MapReduce) versus Spark (which sits on top of Hadoop), he opened by discussing other methods, such as manual curation and manually tagging attributes.  
+
+I am going to argue that these methodologies still have a place, particularly when it comes to avoiding recommendations which would greatly diminish trust. Though you could make initial recommendations using collaborative filtering and reducing dimensionality, before those recommendations are sent, they could somehow be bumped against your manually curated data or the Pandora music genome (assuming you could use it, of course). For example, it could theoretically be possible, if someone is using collaborative filtering only, for a big Jimi Hendrix fan to have a Britney Spears recommendation, but no Jimi Hendrix fan I've ever met would be caught dead listening to Britney Spears, so you would want to exclude that recommendation.  
+
+## "Traditional" Hadoop Has Limits  
+
+The term "Hadoop" is used differently by different people. Some people mean the whole Hadoop stack and all its components when they use the term, while others mean just the Hadoop Distributed File System (HDFS) and the processes used to read and write from it, which is called MapReduce. It is called MapReduce because it executed programmatically (i.e., with Java) using a Map step (filtering, sorting) and a Reduce step (summarizing).  
+
+I am not aware of any large companies that still directly run MapReduce jobs for their workloads, unless they inherited a legacy process that they have not converted or shut down yet. The reason is that it involves endless read-write operations between the master and worker nodes, which is the I/O issue Christopher Johnson mentioned in his presentation. Every company I am aware of using Spark or some other proprietary querying technology which does not depend on MapReduce. For example, at my employer, our data warehouse used to be Cloudera Hadoop, and we used their propriety querying tool Impala instead of MapReduce or Hive.  
+  
+The takeaway is that to do any of this kind of work at scale, you need to know these technologies.  
+
+## Managing Data Will Be a Huge Part of Any Recommender Systems Job  
+  
+As has been emphasized throughout the M.S. in Data Science program at CUNY, generally with any Data Science job, a large portion of your time will be spent learning how to manage and handle data. Tnis is clearly also the case with jobs that fall into the Recommender Systems specialization.  
+
+Furthermore, when it comes to massive datasets, "managing data" means way more than data preparation, data cleanup, etc. It also involved understanding distributed computing and being ready to experiment with how to distribute data over nodes in the most effective way.  
+
+Lastly, this will always be imperfect and a work in progress. As he mentioned towards the end, they have yet to be able to run their processes on their full dataset!!
