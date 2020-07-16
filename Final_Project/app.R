@@ -49,10 +49,11 @@ server <- function(input, output) {
                        choices = sort(anime_name$name), 
                        selected = "Pokemon"), 
            
-           cfanime = selectInput("anime2",
-                       label = "Choose Anime",
-                       choices = sort(anime_name$name), 
-                       selected = "Pokemon")
+           cfanime = selectInput("users",
+                       label = "Choose User",
+                       choices = sort(unique(ubcf_mtx$user)), 
+                       selected = 10072
+                       )
                        
     )})
   
@@ -80,7 +81,15 @@ server <- function(input, output) {
     names(tbl_reg)[names(tbl_reg) == "recs_names"] <- header 
     }
     else {
-    tbl_reg <- NULL
+    n_recommended <- input$nbr_recs
+    u_id = input$users
+    rec_ubcf <- recc_matrix[ ,as.character(u_id)]
+    ubcf_animes <- anime_name[anime_name$anime_id %in% rec_ubcf, ]$name
+    # create table
+    header <- paste0(sprintf("Top %s", n_recommended),sprintf(" recommendations for User: %s", u_id))
+    # display the list of similar animes
+    tbl_reg <- data.frame(ubcf_animes[1:n_recommended])
+    names(tbl_reg)[names(tbl_reg) == "ubcf_animes.1.n_recommended."] <- header 
     }
     tbl_reg
   })
@@ -109,7 +118,7 @@ server <- function(input, output) {
     genre_w <- NA
     }
     else {
-    tbl_sur <- NULL
+      tbl_sur <- NULL
     }
     tbl_sur
   })  
