@@ -274,7 +274,7 @@ pop_sim <- similarity(pop_bm, method = "Jaccard", which = "users")
 genre_pop <- as(pop_sim, "matrix")
 colnames(genre_pop) <- c(pop$anime_id, a_id)
 rownames(genre_pop) <- c(pop$anime_id, a_id)
-image(genre_pop, main = "Similarity Matrix Between 20 Animes")
+image(genre_pop, main = "Similarity Matrix Between 156 Animes")
 ```
 
 #### Top 3 Recommendations by Genre Similarity (with "Surprise")  
