@@ -3,6 +3,7 @@ title: "Final Project - DATA 612"
 author: "Bruno de Melo and Leland Randles"
 date: "July 16th, 2020"
 output: html_document
+runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
@@ -48,7 +49,7 @@ The datsets are available at kaggle: https://www.kaggle.com/CooperUnion/anime-re
   
 We will use the ratings for collaborative filtering and genre plus type for content-based recommendation. Below, we load the datasets:   
   
-```{r load message = FALSE}
+```{r load, message = FALSE}
 set.seed(1234)
 #loading dataset
 anime_raw <- read_csv("https://raw.githubusercontent.com/Randles-CUNY/DATA612/master/Final_Project/datasets_571_1094_anime.csv") %>% data.frame()  
@@ -203,7 +204,7 @@ for (i in 1:ncol(genre_t)) {
   
 Below is the implementation of the recommender list based on the popularity matrix we'd calculated. To demonstrate, a genre is randomly sampled and the N most popular animes related to that genre are displayed.  
   
-```{r genre rec}
+```{r genre rec2}
 # set number of recommendations
 n_recommended <- 10
 # randomly select a anime_id and get corresponding name 
@@ -278,7 +279,7 @@ image(genre_pop, main = "Similarity Matrix Between 20 Animes")
   
 Below is the implementation of the recommendation list based on the genre similarity matrix we calculated above (which includes the "Surprise" kicker). One anime show is randomly sampled and then the N most similar animes to the one sampled are displayed.  
   
-```{r genre rec}
+```{r genre rec3}
 # set number of recommendations
 n_recommended <- 3
 # get recommendations
@@ -295,27 +296,166 @@ kable(rec_names_p, col.names = header) %>% kable_styling()
   
 ## UBCF Model  
   
-
-
-```{r}
-#ratings matrix
-rating_raw <- rating_raw[rating_raw$user_id %in% anime_genre_ids, ]
-rating_mtx <- as(rating_raw, "realRatingMatrix")
-
+Finally, we built a user-based collaborative filtering recommender model based on data for users which had rated at least 300 anime and anime which had been rating by at least 1,000 users.  
+  
+```{r, ubcf, warning=FALSE}
+# create ratings matrix
+ubcf_rtg <- ratings_raw[ratings_raw$user_id %in% anime_genre_ids, ]
+ubcf_rtg <- drop_na(ratings_raw)
+ubcf_rtg <- as(ubcf_rtg, "realRatingMatrix")
+ubcf_rtg <- ubcf_rtg[rowCounts(ubcf_rtg) > 300, colCounts(ubcf_rtg) > 1000] 
+ubcf_mtx <- as(ubcf_rtg, "data.frame")
+ubcf_rtg <- binarize(ubcf_rtg, minRating = 1)
 # split datasets
-eval_sets <- evaluationScheme(data = rating_mtx, method = "cross-validation", k = 4, given = 1, goodRating = 6)
-# build UBCF model and SVD model
-ubcf_rec <- Recommender(getData(eval_sets, "train"), "UBCF", param = list(normalize = "center", method = "cosine"))
-# Make predictions with each model
-ubcf_pred <- predict(ubcf_rec, getData(eval_sets, "known"), n = 20)
+eval_sets <- evaluationScheme(data = ubcf_rtg, method = "split", train = 0.8, given = 1, goodRating = 1)
+# build UBCF model
+ubcf_rec <- Recommender(getData(eval_sets, "train"), "UBCF", param = list(method = "Jaccard"))
+# make predictions
+ubcf_pred <- predict(ubcf_rec, getData(eval_sets, "known"), n = 30, goodRating = 1)
+# Make predictions on whole dataset
+ubcf_all <- predict(ubcf_rec, ubcf_rtg, n = 30, goodRating = 1) 
+recc_matrix <- sapply(ubcf_all@items, function(x){colnames(ubcf_rtg)[x]})
+# user sampling and recommendation display
+id_sample <- sample(ubcf_mtx$user, 1)
+rec_ubcf <- recc_matrix[ ,as.character(id_sample)]
+ubcf_animes <- anime_name[anime_name$anime_id %in% rec_ubcf, ]$name
+# create table
+header <- sprintf("Top N recommendations for User: %s", id_sample)
+# display the list of similar animes
+kable(ubcf_animes[1:10], col.names = header) %>% kable_styling()
 ```  
 
 ## Display Recommendations in Shiny App
   
 To allow us to generate predictions on the fly and display them, we created a Shiny App.
 
-```{r shapp}
-# library(shiny)
-# runApp('App-1')
+```{r, echo = FALSE}
+shinyApp(
+  # Define UI for dataset viewer app ----
+ui <- fluidPage(
+  
+  # App title ----
+  titlePanel("Anime Recommendations"),
+  
+  # Sidebar layout with a input and output definitions ----
+  sidebarLayout(
+    
+    # Sidebar panel for inputs ----
+    sidebarPanel(
+      
+      radioButtons("radio", h4("Desired Recommendation:"),
+                   choices = c("Content-Based Genre" = "cbgenre", 
+                               "Content-Based Anime" = "cbanime",
+                               "Collaborative Filtering - Anime" = "cfanime")), 
+      
+      uiOutput("radiobuttonChoiceOutput"), 
+      
+      sliderInput("nbr_recs", h4("# of Anime to Recommend"),
+                  min = 5, max = 30, value = 10)
+
+      ),
+    
+    # Main panel for displaying outputs ----
+    mainPanel(
+      
+      # Output: HTML table with requested number of observations ----
+      tableOutput("reg_rec_list"), 
+      tableOutput("sur_rec_list")
+      
+    )
+  )
+), 
+
+# Define server logic to summarize and view selected dataset ----
+server <- function(input, output) {
+
+  output$radiobuttonChoiceOutput <- renderUI({
+    switch(input$radio,
+           cbgenre = selectInput("genre",
+                       label = "Choose Genre",
+                       choices = sort(uniq_genre)),  
+           
+           cbanime = selectInput("anime1",
+                       label = "Choose Anime",
+                       choices = sort(anime_name$name), 
+                       selected = "Pokemon"), 
+           
+           cfanime = selectInput("users",
+                       label = "Choose User",
+                       choices = sort(unique(ubcf_mtx$user)), 
+                       selected = 10072
+                       )
+                       
+    )})
+  
+  # Show the first "n" observations ----
+  output$reg_rec_list <- renderTable({
+    if (input$radio == "cbgenre") {
+    n_recommended <- input$nbr_recs
+    s_genre <- input$genre
+    rec_genre <- sort(genre_t[as.character(s_genre), ], decreasing = TRUE)[1:n_recommended]
+    rec_id_genre <- as.numeric(names(rec_genre))
+    rec_names <- anime_name[anime_name$anime_id %in% rec_id_genre, ]$name
+    header <- sprintf("Most viewed Animes in %s", s_genre)
+    tbl_reg <- data.frame(rec_names)
+    names(tbl_reg)[names(tbl_reg) == "rec_names"] <- header
+    }
+    else if (input$radio == "cbanime") {
+    n_recommended <- input$nbr_recs
+    a_name = input$anime1
+    a_id <- anime_name[anime_name$name == a_name, ]$anime_id
+    recs <- sort(genre_v[as.character(a_id),], decreasing = TRUE)[1:n_recommended]
+    recs_id <- as.numeric(names(recs))
+    recs_names <- anime_name[anime_name$anime_id %in% recs_id, ]$name
+    header <- sprintf("Animes Similar to %s", a_name)
+    tbl_reg <- data.frame(recs_names)
+    names(tbl_reg)[names(tbl_reg) == "recs_names"] <- header 
+    }
+    else {
+    n_recommended <- input$nbr_recs
+    u_id = input$users
+    rec_ubcf <- recc_matrix[ ,as.character(u_id)]
+    ubcf_animes <- anime_name[anime_name$anime_id %in% rec_ubcf, ]$name
+    # create table
+    header <- paste0(sprintf("Top %s", n_recommended),sprintf(" recommendations for User: %s", u_id))
+    # display the list of similar animes
+    tbl_reg <- data.frame(ubcf_animes[1:n_recommended])
+    names(tbl_reg)[names(tbl_reg) == "ubcf_animes.1.n_recommended."] <- header 
+    }
+    tbl_reg
+  })
+
+  output$sur_rec_list <- renderTable({
+    if (input$radio == "cbanime") {
+    n_recommended <- 3
+    a_name = input$anime1
+    a_id <- anime_name[anime_name$name == a_name, ]$anime_id
+    
+    tmp_anime <- genre_b[as.character(a_id), ]
+    genre_w <- rbind(genre_p[!rownames(genre_p) %in% "tmp_anime", ], tmp_anime)
+    pop_bm <- as(genre_w, "binaryRatingMatrix")
+    pop_sim <- similarity(pop_bm, method = "Jaccard", which = "users")
+    genre_pop <- as(pop_sim, "matrix")
+    colnames(genre_pop) <- c(pop$anime_id, a_id)
+    rownames(genre_pop) <- c(pop$anime_id, a_id)
+    
+    n_recommended <- 3
+    rec_pop <- sort(genre_pop[as.character(a_id), ], decreasing = TRUE)[1:n_recommended]
+    rec_id_p <- as.numeric(names(rec_pop))
+    rec_names_p <- anime_name[anime_name$anime_id %in% rec_id_p,]$name
+    header <- sprintf("Surprise Picks (Lesser-Known Animes Similar to): %s", a_name)
+    tbl_sur <- data.frame(rec_names_p)
+    names(tbl_sur)[names(tbl_sur) == "rec_names_p"] <- header 
+    genre_w <- NA
+    }
+    else {
+      tbl_sur <- NULL
+    }
+    tbl_sur
+  })  
+
+}, 
+options = list(height = 1200)
+)
 ```
 
