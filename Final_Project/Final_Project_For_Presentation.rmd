@@ -233,9 +233,9 @@ tmp <- sum(c(as.character(pop$anime_id) %in% colnames(genre_t)))
 tmp
 ```  
   
-These two animes were dropped from this dataset and we built a "surprise" popularity matrix using the same procedure as we'd used previously in the [Recommendations Based on Popularity] section.  
-
-Then, a similarity matrix was interactively built based on the anime chosen in the [Top 10 Recommendations by Genre Similarity] section.  
+These two animes were dropped from this dataset and we built a "surprise" popularity matrix using the same procedure as we'd used previously in the [Recommendations Based on Genre Similarity] section.   
+  
+Then, a similarity matrix was interactively built based on the anime chosen in the [Top 10 Recommendations by Genre Similarity] section.    
   
 ```{r sur2}
 # find animes in popularity dataset for all but the sample id
