@@ -1,0 +1,51 @@
+---
+title: "Research Discussion Assignment 4 - DATA 612 - Summer 2020"
+author: "Leland Randles"
+date: "July 16, 2020"
+output: 
+  html_document:
+    toc: true # table of content true
+    toc_float: true
+    toc_depth: 3  # up to three depths of headings (specified by #, ## and ###)
+    number_sections: true  #if you want number sections at each table header
+    theme: united  # many options for theme, this one is my favorite
+    highlight: tango  # specifies the syntax highlighting style
+    #css: my.css   # you can add your custom css, should be in same folder
+---
+
+# Assignment   
+<a href="#top"> Back To Top </a>  
+  
+From the message board assignment:  
+"Read one or more of the articles below and consider how to counter the radicalizing effects of recommender systems or ways to prevent algorithmic discrimination."  
+  
+(I've placed links to the articles in the [References] section).  
+  
+<br>
+  
+# Answer  
+<a href="#top"> Back To Top </a>  
+  
+The New York Times article and the Wired article are editorial pieces that does not match with my personal experience. I've spent a lot of time on YouTube and while I certainly see videos now and then which are questionable (a couple weeks ago I saw a video by a professor in Africa arguing that people should not use pharmaceutical drugs because they can stay healthy by eating certain roots - and this was not an advertisement), I have never, ever encountered a "white supremacist" video, for example, much less had one recommended to me. That's true now, and it was true in 2016. So while I am sure there is content like that if you go looking for it, I just don't see YouTube "promoting" that content or over-recommending it, nor do I see them as any more of a "radicalizer" than any of our mega-conglomerate media companies (with so-called "news" channels like CNN, FOX, and MSNBC), talk radio, or even the New York Times itself.  
+  
+I do think it is foolhardy not to recognize, however, that Alphabet is a truly massive conglomerate operating in a wide range of domains. Google is their internet services business, and that entity alone includes GSuite, Search, YouTube, Android, Cloud Computing, Looker, Waze, Double-Click, etc. That is just a start, other businesses besides the Google business under the Alphabet banner include an anti-aging company, a private equity company, Google Fiber, DeepMind, a company for drone-based delivery of freight, a company working on autonomous driving, a company focused on urban innovation, a "Human Health" company, etc. So I think the threat of Alphabet having excessive influence in politics is something people should be cognizant of in the same way they would be concerned about investment banks, oil companies, or other massive corporate interests having inordinate influence. This, to me, is quite literally thousands of times more concerning than if people are sometimes recommended a questionable or extremist video. This is especially true if the aforementioned massive corporate interests throw in almost entirely with one political party or politician.  
+  
+Secondly, I think it would be foolhardy to not comprehend the way the "media" has changed in the last 20-30 years. For starters, there has been staggering consolidation. I am not sure how accurate this infographic is, but it does include citations: https://infographicjournal.com/media-consolidation-the-illusion-of-choice/. Most publications in the print media arena, particularly, are struggling to stay viable or are in fact not profitable. Once-revered media brands have been purchased by business titans and are run to infuence or manipulate the public, rather than inform it. Furthermore, these huge conglomerates (Disney, Viacom, Time Warner, etc.) operate in other business segments besides the media. They run theme parks, cruise lines, and more. To boot, these companies are increasingly catering to the Alphabets of the world as they move towards streaming, social media, etc.  
+  
+I really think it is best for massively powerful entities like Alphabet to act like the Section 230 entities they are. This means they are not publishers; rather, they host content created by users. In my opinion, having them to filter out content raises way too many opportunities for corruption or manipulation. If they have internal evidence that they are over-recommending polarizing or extremist videos, then of course it is fine to do that, but I have not experienced that. Obviously, if a company like Alphabet becomes the arbiter of what is polarizing or extremist and censors it, then anything against it's interests could be marked as polarizing and/or extemist. If they are doing it in coordination with specific politicians or a political party, it is potentially even more despicable. Google Search itself sells the ranking of results out. Right now, Google is under antitrust investigation in 48 states, the EU, and elsewhere.  
+  
+There is the suggestion here that if someone watches a "polarizing" video or "extremist" video (neither editorialist defined exactly what that is), then they will adopt extreme views. But I am still using pharmaceutical drugs after watching that video. It just feels like both editorialists are going out of their way to find a boogey man to explain polarization or extremism and trying to blame recommendation engines. Isn't it way more likely that income inequality causes polarization than YouTube? That is my sense, but I will admit I have not studied it. I think a reasonable person should be way more concerned about the fact that we have extraordinary massive corporate interests involved that spend huge amounts of money influencing politicians, campaigns, etc., than the possibility the small percentage of people prone to extremism might be getting inadvertently fed a steady diet of videos in that veign.
+
+I also think it would be a good idea to look into other lines of research that could explain polarization or extremism, such as smart phone addiction:  https://www.healthline.com/health/mental-health/cell-phone-addiction#whos-at-risk. It may be less the messages themselves then the fact that people are perpetually inundated with them (by choice).  
+  
+Regardless, the assignment asked what to do to counter the radicalizing effects of recommender systems or ways to prevent algorithmic discrimination, and my answer is the same as my answers to Research Discussion Assignment 3.  
+  
+<br>
+
+# References
+<a href="#top"> Back To Top </a>
+
+* Renee Diresta, Wired.com (2018): Up Next: A Better Recommendation System. https://www.wired.com/story/creating-ethical-recommendation-engines/
+* Zeynep Tufekci, The New York Times (2018): YouTube, the Great Radicalizer. https://www.nytimes.com/2018/03/10/opinion/sunday/youtube-politics-radical.html
+* Sanjay Krishnan, Jay Patel, Michael J. Franklin, Ken Goldberg (n/a): Social Influence Bias in Recommender Systems: A Methodology for Learning, Analyzing, and Mitigating Bias in Ratings. https://goldberg.berkeley.edu/pubs/sanjay-recsys-v10.pdf
+
