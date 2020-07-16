@@ -2,4 +2,4 @@
 Recommender Systems  
 Summer 2020 Term  
   
-Repository Includes Assignments, Final Project, and any Artefacts related to those
+Repository Includes weekly Project, Final Project, Research Discussion Assignments, In-Context Presentatiobn, and any Artefacts related to those
