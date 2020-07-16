@@ -1,0 +1,50 @@
+---
+title: "Research Discussion Assignment 3 - DATA 612 - Summer 2020"
+author: "Leland Randles"
+date: "July 15, 2020"
+output: 
+  html_document:
+    toc: true # table of content true
+    toc_float: true
+    toc_depth: 3  # up to three depths of headings (specified by #, ## and ###)
+    number_sections: true  #if you want number sections at each table header
+    theme: united  # many options for theme, this one is my favorite
+    highlight: tango  # specifies the syntax highlighting style
+    #css: my.css   # you can add your custom css, should be in same folder
+---
+
+# Assignment   
+<a href="#top"> Back To Top </a>  
+  
+From the message board assignment:  
+"As more systems and sectors are driven by predictive analytics, there is increasing awareness of the possibility and pitfalls of algorithmic discrimination. In what ways do you think Recommender Systems reinforce human bias? Reflecting on the techniques we have covered, do you think recommender systems reinforce or help to prevent unethical targeting or customer segmentation?  Please provide one or more examples to support your arguments."  
+  
+<br>
+  
+# Answers  
+<a href="#top"> Back To Top </a>  
+  
+The presentation by Evan Estola brought up some interesting examples of situations where recommender systems made recommendations that were unethical, embarrassing, and/or potentially illegal. Not all of the examples specifically related to recommender systems. Facial recognition tools are not recommender systems, for example.  
+  
+"Bias" in data is something we talk about regularly in data science even before ethical issues come into play. It is not surprising that a k-nearest neighbors (KNN) algorithm could inadvertently cast people into disparate groups which unintentionally overlap with race and gender, for example, because they are designed to cluster together people based on similarity. The issue is that the clustering should not be **driven** by race or gender attributes.  
+  
+To avoid some of these issues, Mr Estola suggests the following:  
+
+* Build data ethics into your work as a matter of practice
+* Deliberately disallow certain paths of learning in your models
+* Build interpretable models
+* Explicitly include features that work the way you want and don't include feature interactions you don't want
+* Segregate algorithms and data where appropriate (one algorithm for gender and another for interests, don't mix them so they are ignorant of each other)
+* Having testing methods in place that specifically look for the biases you've deemed unethical
+
+I think recommender systems **can** reinforce or help to prevent unethical targeting or customer segmentation. It depends on how they are designed. I think it is critical that you can demonstrate that your design was cognitive of potential issues and addressed them, at minimum from the standpoint of attempting to shield yourself from potential liability.   
+  
+I would argue that your starting point has to be defining your exact ethical construct, because grey areas are immediately evident once you examine these ideas critically. You have to have a written policy of what is unethical or not unethical. I think people would universally condemn blatant biases on the basis of race or gender, but what about a situation where a recommnder is consistently recommending high fat content foods to an obese customer who has bought such products in the past? Is this "unethical", or could it get you in trouble? Is it ethical to know if they are obese? Is it ethical if you don't know they are obese, but just went off of their purchases? Should you throw some healthy items into their recommendations just to cover yourself? These are very tough delineations, in my opinion.  
+  
+<br>
+
+# References
+<a href="#top"> Back To Top </a>
+
+* Evan Estola (2016): When Recommendations Systems Go Bad; MLconf SEA 2016. https://www.youtube.com/watch?v=MqoRzNhrTnQ
+* Moritz Hardt, Eric Price, Nathan Srebro (2016):  Equality of Opportunity in Supervised Learning. https://arxiv.org/pdf/1610.02413.pdf
